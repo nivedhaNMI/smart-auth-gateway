@@ -34,7 +34,9 @@ public class AuthController {
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             String token = authHeader.substring(7);
             // Blacklist for 1 hour
-            blacklistService.blacklistToken(token, 3600000L);
+           // blacklistService.blacklistToken(token, 3600000L);
+            long expiry = jwtService.extractExpiration(token).getTime() - System.currentTimeMillis();
+blacklistService.blacklistToken(token, expiry);
         }
         return ResponseEntity.ok("Logged out successfully");
     }

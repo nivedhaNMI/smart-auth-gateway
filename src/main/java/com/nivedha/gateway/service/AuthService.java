@@ -39,9 +39,11 @@ public class AuthService {
         );
         var user = userRepository.findByUsername(request.username()).orElseThrow();
         var token = jwtService.generateToken(
-                new org.springframework.security.core.userdetails.User(
-                        user.getUsername(), user.getPassword(), java.util.List.of()
-                )
+               new org.springframework.security.core.userdetails.User(
+    user.getUsername(), 
+    user.getPassword(), 
+    List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole().name()))
+)
         );
         return new AuthResponse(token);
     }
